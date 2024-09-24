@@ -974,4 +974,19 @@ public class ReplayFromDumpTest extends ReplayFromDumpTestBase {
             connectContext.getSessionVariable().replayFromJson(savedSv);
         }
     }
+
+    @Test
+    public void testPruneTableNPE() throws Exception {
+        String savedSv = connectContext.getSessionVariable().getJsonString();
+        try {
+            connectContext.getSessionVariable().setEnableCboTablePrune(true);
+            connectContext.getSessionVariable().setEnableRboTablePrune(true);
+            Pair<QueryDumpInfo, String> replayPair =
+                    getPlanFragment(getDumpInfoFromFile("query_dump/prune_table_npe"),
+                            null, TExplainLevel.NORMAL);
+            System.out.println(replayPair.second);
+        } finally {
+            connectContext.getSessionVariable().replayFromJson(savedSv);
+        }
+    }
 }
